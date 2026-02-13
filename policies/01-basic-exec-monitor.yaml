@@ -1,0 +1,25 @@
+# Project: Sentinel Trace (V1 - Genesis)
+# Description: This policy monitors the Nginx user (www-data) for any shell execution.
+# It uses eBPF kprobes to intercept the sys_execve syscall.
+
+apiVersion: cilium.io/v1alpha1
+kind: TracingPolicy
+metadata:
+  name: "detect-suspicious-shell-from-nginx"
+spec:
+  kprobes:
+  - call: "sys_execve"
+    syscall: true
+    args:
+    - index: 0
+      type: "string"
+    selectors:
+    - matchPIDs:
+      - operator: In
+        values: [33] # Target UID 33 (standard for www-data on Debian)
+      matchArgs:      
+      - index: 0
+        operator: "Equal"
+        values:
+        - "/bin/sh"
+        - "/bin/bash"
