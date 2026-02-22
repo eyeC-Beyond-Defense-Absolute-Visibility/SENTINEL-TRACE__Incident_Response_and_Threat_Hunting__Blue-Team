@@ -1,0 +1,17 @@
+{
+  "_comment": "Global settings for the Sentinel-Trace Intelligence Engine.",
+  "engine": {
+    "node_name": "sentinel-core-01",
+    "log_level": "DEBUG",
+    "persistence_path": "./logs/detections.log"
+  },
+  "integration": {
+    "sovereign_shield_path": "/opt/sovereign-shield/bin/SovereignShield",
+    "alert_endpoint": "http://localhost:8080/alerts",
+    "auto_quarantine": true
+  },
+  "ebpf": {
+    "tetragon_binary": "/usr/local/bin/tetra",
+    "policy_dir": "./policies/v2-correlation/"
+  }
+}

