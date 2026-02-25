@@ -4,8 +4,7 @@
 # 🛰️ Sentinel Trace (v1.0 — Genesis)
 
 > ## Note
-> *Sovereign Shield is one of the eyeC Triplets*
-
+> *Sentinel Trace is one of the eyeC Triplets*
 > *🔗 [Explore the project](https://github.com/eyeC-DevSecOps-project)*
 
 > **"Signals are cheap. Decisions are earned."** > *Behavioral Detection Lab powered by eBPF & Tetragon.*
