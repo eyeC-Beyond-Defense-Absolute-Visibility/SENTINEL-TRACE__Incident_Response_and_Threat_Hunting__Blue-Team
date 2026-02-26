@@ -1,5 +1,8 @@
-![Version](https://img.shields.io/badge/version-2.0--correlation-blue?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Success_PoC-success?style=for-the-badge)
+![eBPF](https://img.shields.io/badge/Linux-eBPF-000000?logo=linux&logoColor=white) ![Tetragon](https://img.shields.io/badge/Tetragon-Tracing-00b3a4?logo=cilium&logoColor=white) ![Context-Aware](https://img.shields.io/badge/Logic-Contextual_Reasoning-blueviolet) ![Telemetry](https://img.shields.io/badge/Telemetry-Kernel_Level-orange)
+
+![IaC](https://img.shields.io/badge/Infrastructure_as_Code-Enabled-green?logo=terraform&logoColor=white) ![Systemd](https://img.shields.io/badge/Persistence-systemd-0066cc) ![Security](https://img.shields.io/badge/Role-Blue_Team-blue) ![Status](https://img.shields.io/badge/Phase-I_Genesis-green)
+
+![Kali Linux](https://img.shields.io/badge/Kali_Linux-557C94?logo=kali-linux&logoColor=white) ![Debian](https://img.shields.io/badge/Debian-A81D33?logo=debian&logoColor=white)
 
 # 🛰️ Sentinel Trace (v1.0 — Genesis)
 
@@ -134,5 +137,8 @@ The service is configured to automatically load all policies located in `/etc/te
 ```
 
 
-👤 Author
-O’djuma Badolo Cybersecurity • Cloud • DevSecOps
+## 👤 Author
+
+**O'djuma Badolo**  
+Web Developer | Cybersecurity graduate | DevSecOps Enthusiast  
+> *"Building secure systems by thinking like the storm."*
