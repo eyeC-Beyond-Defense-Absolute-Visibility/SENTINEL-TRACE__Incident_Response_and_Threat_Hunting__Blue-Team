@@ -1,3 +1,9 @@
+![C++](https://img.shields.io/badge/C++-Correlation_Engine-00599C?logo=c%2B%2B&logoColor=white) ![eBPF](https://img.shields.io/badge/Linux-eBPF-000000?logo=linux&logoColor=white) ![Tetragon](https://img.shields.io/badge/Tetragon-Tracing-00b3a4?logo=cilium&logoColor=white) ![JSON](https://img.shields.io/badge/Rules-JSON_Decoupled-black?logo=json&logoColor=white)
+
+![Correlation](https://img.shields.io/badge/Logic-Stateful_Correlation-blueviolet) ![MITRE ATT&CK](https://img.shields.io/badge/MITRE_ATT%26CK-T1059.004-ff6600) ![Decision](https://img.shields.io/badge/Decision-High--Fidelity_Alert-red)
+
+![Sovereign Bridge](https://img.shields.io/badge/Bridge-SOAR_Integration-green) ![Triplets](https://img.shields.io/badge/Project-eyeC_Triplets-blueviolet)
+
 # 🛰️ Sentinel-Trace v2.0: Correlation Engine
 
 > *"Signals are cheap. Decisions are earned."*
@@ -81,5 +87,5 @@ Detection logic is decoupled from the code. Add new behaviors in `config/detecti
 ## 👤 Author
 
 **O'djuma Badolo**  
-Cybersecurity • Cloud • DevSecOps  
-*The eyeC Project: Making the invisible visible.*
+Web Developer | Cybersecurity graduate | DevSecOps Enthusiast  
+> *"Building secure systems by thinking like the storm."*
